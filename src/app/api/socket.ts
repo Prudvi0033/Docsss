@@ -25,7 +25,7 @@ const socketHandler = (req: NextApiRequest, res: NextResponseWithSocket) => {
 
       socket.on('message', (msg) => {
         console.log(`Received message: ${msg}`);
-        io.emit('message', msg); 
+        io.emit('message', msg);
       });
 
       socket.on('disconnect', () => {
