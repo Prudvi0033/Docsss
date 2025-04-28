@@ -3,10 +3,13 @@
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Formatter from './Formatter'
+import TextStyle from '@tiptap/extension-text-style'
+import Color from '@tiptap/extension-color'
+
 
 const Tiptap = () => {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, TextStyle, Color],
     content: `
       <h3 style="text-align:center">
         Devs Just Want to Have Fun by Cyndi Lauper
