@@ -4,7 +4,7 @@ import Tiptap from './components/Tiptap'
 const page = () => {
   return (
     <div>
-      
+      <Tiptap/>
     </div>
   )
 }
