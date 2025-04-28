@@ -1,114 +1,191 @@
-import Highlight from '@tiptap/extension-highlight'
-import TextAlign from '@tiptap/extension-text-align'
-import { Editor } from '@tiptap/react'
-import React, { useState } from 'react'
-import TextStyle from '@tiptap/extension-text-style'
-import { Bold, Italic, Strikethrough, Highlighter, AlignLeft, AlignCenter, AlignRight, AlignJustify, Paintbrush } from 'lucide-react'
+"use client"
+
+import type { Editor } from "@tiptap/react"
+import type React from "react"
+import { useState, useRef, useEffect } from "react"
+import { Bold, Italic, Strikethrough, Paintbrush, AlignLeft, AlignCenter, AlignRight, AlignJustify } from "lucide-react"
 
 interface FormatterProps {
-    editor: Editor | null
+  editor: Editor | null
 }
 
 const COLORS = [
-  '#000000', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF', '#800000', 
-  '#808000', '#008000', '#800080', '#008080', '#000080', '#FFA500', '#A52A2A', '#8A2BE2', 
-  '#5F9EA0', '#7FFF00', '#D2691E', '#FF7F50', '#6495ED', '#DC143C', '#00CED1', '#9400D3', 
-  '#FF1493', '#00BFFF', '#1E90FF', '#228B22', '#FF69B4', '#CD5C5C'
-];
+  "#000000",
+  "#333333",
+  "#666666",
+  "#999999",
+  "#CCCCCC",
+  "#FFFFFF",
+  "#FF0000",
+  "#800000",
+  "#FFA500",
+  "#FFFF00",
+  "#808000",
+  "#00FF00",
+  "#008000",
+  "#00FFFF",
+  "#008080",
+  "#0000FF",
+  "#000080",
+  "#FF00FF",
+  "#800080",
+  "#A52A2A",
+  "#D2691E",
+  "#FF7F50",
+  "#6495ED",
+  "#1E90FF",
+]
 
 const Formatter: React.FC<FormatterProps> = ({ editor }) => {
-    const [showColorPalette, setShowColorPalette] = useState(false);
+  const [showColorPalette, setShowColorPalette] = useState(false)
+  const colorPaletteRef = useRef<HTMLDivElement>(null)
 
-    const handleColorClick = (color: string) => {
-        editor?.chain().focus().setColor(color).run();
-        setShowColorPalette(false);
+  const handleColorClick = (color: string) => {
+    editor?.chain().focus().setColor(color).run()
+    setShowColorPalette(false)
+  }
+
+  // Close color palette when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (colorPaletteRef.current && !colorPaletteRef.current.contains(event.target as Node)) {
+        setShowColorPalette(false)
+      }
     }
 
-    if (!editor) return null;
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
-    return (
-        <div className="flex items-center justify-center mt-4 border border-white gap-2 p-3 text-black rounded-md flex-wrap">
+  if (!editor) return null
 
-            {/* Bold */}
-            <button
-                onClick={() => editor.chain().focus().toggleBold().run()}
-                className={`p-2 rounded-md ${editor.isActive('bold') ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-100`}
-            >
-                <Bold size={16} />
-            </button>
+  return (
+    <div className="flex items-center justify-center mt-4 border border-gray-300 gap-2 p-3 rounded-md flex-wrap bg-white shadow-sm">
+      {/* Bold */}
+      <button
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        className={`p-2 rounded-md transition-colors ${
+          editor.isActive("bold")
+            ? "bg-black text-white"
+            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+        }`}
+        aria-label="Bold"
+      >
+        <Bold size={16} />
+      </button>
 
-            {/* Italic */}
-            <button
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-                className={`p-2 rounded-md ${editor.isActive('italic') ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-100`}
-            >
-                <Italic size={16} />
-            </button>
+      {/* Italic */}
+      <button
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={`p-2 rounded-md transition-colors ${
+          editor.isActive("italic")
+            ? "bg-black text-white"
+            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+        }`}
+        aria-label="Italic"
+      >
+        <Italic size={16} />
+      </button>
 
-            {/* Strike */}
-            <button
-                onClick={() => editor.chain().focus().toggleStrike().run()}
-                className={`p-2 rounded-md ${editor.isActive('strike') ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-100`}
-            >
-                <Strikethrough size={16} />
-            </button>
+      {/* Strike */}
+      <button
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        className={`p-2 rounded-md transition-colors ${
+          editor.isActive("strike")
+            ? "bg-black text-white"
+            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+        }`}
+        aria-label="Strikethrough"
+      >
+        <Strikethrough size={16} />
+      </button>
 
-            {/* TextColor Palette */}
-            <div className="relative">
-                <button
-                    onClick={() => setShowColorPalette(!showColorPalette)}
-                    className="p-2 rounded-md bg-white hover:bg-blue-100"
-                >
-                    <Paintbrush size={16} />
-                </button>
+      {/* Divider */}
+      <div className="h-6 w-px bg-gray-300 mx-1"></div>
 
-                {showColorPalette && (
-                    <div className="absolute top-10 p-6 bg-white border rounded-md shadow-md grid grid-cols-6 gap-5 z-10">
-                        {COLORS.map((color) => (
-                            <button
-                                key={color}
-                                onClick={() => handleColorClick(color)}
-                                className="w-4 h-4 rounded-full"
-                                style={{ backgroundColor: color }}
-                            />
-                        ))}
-                    </div>
-                )}
-            </div>
+      {/* TextColor Palette */}
+      <div className="relative" ref={colorPaletteRef}>
+        <button
+          onClick={() => setShowColorPalette(!showColorPalette)}
+          className="p-2 rounded-md bg-white text-black border border-gray-200 hover:bg-gray-100 transition-colors"
+          aria-label="Text color"
+        >
+          <Paintbrush size={16} />
+        </button>
 
-            {/* Align Left */}
-            <button
-                onClick={() => editor.chain().focus().setTextAlign('left').run()}
-                className={`p-2 rounded-md ${editor.isActive({ textAlign: 'left' }) ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-100`}
-            >
-                <AlignLeft size={16} />
-            </button>
+        {showColorPalette && (
+          <div className="absolute top-10 p-4 bg-white border border-gray-200 rounded-md shadow-lg grid grid-cols-6 gap-3 z-10 w-64">
+            {COLORS.map((color) => (
+              <button
+                key={color}
+                onClick={() => handleColorClick(color)}
+                className="w-6 h-6 rounded-full border border-gray-300 transition-transform hover:scale-110"
+                style={{ backgroundColor: color }}
+                aria-label={`Color ${color}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
-            {/* Align Center */}
-            <button
-                onClick={() => editor.chain().focus().setTextAlign('center').run()}
-                className={`p-2 rounded-md ${editor.isActive({ textAlign: 'center' }) ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-100`}
-            >
-                <AlignCenter size={16} />
-            </button>
+      {/* Divider */}
+      <div className="h-6 w-px bg-gray-300 mx-1"></div>
 
-            {/* Align Right */}
-            <button
-                onClick={() => editor.chain().focus().setTextAlign('right').run()}
-                className={`p-2 rounded-md ${editor.isActive({ textAlign: 'right' }) ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-100`}
-            >
-                <AlignRight size={16} />
-            </button>
+      {/* Align Left */}
+      <button
+        onClick={() => editor.chain().focus().setTextAlign("left").run()}
+        className={`p-2 rounded-md transition-colors ${
+          editor.isActive({ textAlign: "left" })
+            ? "bg-black text-white"
+            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+        }`}
+        aria-label="Align left"
+      >
+        <AlignLeft size={16} />
+      </button>
 
-            {/* Justify */}
-            <button
-                onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-                className={`p-2 rounded-md ${editor.isActive({ textAlign: 'justify' }) ? 'bg-blue-500 text-white' : 'bg-white'} hover:bg-blue-100`}
-            >
-                <AlignJustify size={16} />
-            </button>
-        </div>
-    )
+      {/* Align Center */}
+      <button
+        onClick={() => editor.chain().focus().setTextAlign("center").run()}
+        className={`p-2 rounded-md transition-colors ${
+          editor.isActive({ textAlign: "center" })
+            ? "bg-black text-white"
+            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+        }`}
+        aria-label="Align center"
+      >
+        <AlignCenter size={16} />
+      </button>
+
+      {/* Align Right */}
+      <button
+        onClick={() => editor.chain().focus().setTextAlign("right").run()}
+        className={`p-2 rounded-md transition-colors ${
+          editor.isActive({ textAlign: "right" })
+            ? "bg-black text-white"
+            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+        }`}
+        aria-label="Align right"
+      >
+        <AlignRight size={16} />
+      </button>
+
+      {/* Justify */}
+      <button
+        onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+        className={`p-2 rounded-md transition-colors ${
+          editor.isActive({ textAlign: "justify" })
+            ? "bg-black text-white"
+            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+        }`}
+        aria-label="Justify"
+      >
+        <AlignJustify size={16} />
+      </button>
+    </div>
+  )
 }
 
 export default Formatter
