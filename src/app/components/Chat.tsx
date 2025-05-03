@@ -11,7 +11,7 @@ export default function Chat() {
 
   useEffect(() => {
     const startSocket = async () => {
-      await fetch("/api/socket"); // 🛎️ Wake up the server first
+      await fetch("/api/socket"); // 
 
       socket = io({
         path: "/api/socket",

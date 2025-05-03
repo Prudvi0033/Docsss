@@ -23,10 +23,9 @@ const socketHandler = (req: NextApiRequest, res: NextResponseWithSocket) => {
     io.on('connection', (socket) => {
       console.log("New socket connected:", socket.id);
 
-      socket.on('message', (msg) => {
-        console.log(`Received message: ${msg}`);
-        io.emit('message', msg);
-      });
+      socket.on("doc-update", (html) => {
+        socket.broadcast.emit("doc-update",html)
+      })
 
       socket.on('disconnect', () => {
         console.log(`Socket disconnected: ${socket.id}`);
