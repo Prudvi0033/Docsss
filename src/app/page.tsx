@@ -5,8 +5,7 @@ import Chat from './components/Chat'
 const page = () => {
   return (
     <div>
-      {/* <Tiptap/> */}
-      <Chat/>
+      <Tiptap/>
     </div>
   )
 }
