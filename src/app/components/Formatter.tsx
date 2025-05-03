@@ -2,8 +2,11 @@
 
 import type { Editor } from "@tiptap/react"
 import type React from "react"
+import { Montserrat } from "next/font/google"
 import { useState, useRef, useEffect } from "react"
-import { Bold, Italic, Strikethrough, Paintbrush, AlignLeft, AlignCenter, AlignRight, AlignJustify } from "lucide-react"
+import { Bold, Italic, Strikethrough, Paintbrush, AlignLeft, AlignCenter, AlignRight, AlignJustify, ChevronDown } from "lucide-react"
+
+const monte = Montserrat({subsets : ['latin']})
 
 interface FormatterProps {
   editor: Editor | null
@@ -66,11 +69,10 @@ const Formatter: React.FC<FormatterProps> = ({ editor }) => {
       {/* Bold */}
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`p-2 rounded-md transition-colors ${
-          editor.isActive("bold")
-            ? "bg-black text-white"
-            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
-        }`}
+        className={`p-2 rounded-md transition-colors ${editor.isActive("bold")
+          ? "bg-black text-white"
+          : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+          }`}
         aria-label="Bold"
       >
         <Bold size={16} />
@@ -79,11 +81,10 @@ const Formatter: React.FC<FormatterProps> = ({ editor }) => {
       {/* Italic */}
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`p-2 rounded-md transition-colors ${
-          editor.isActive("italic")
-            ? "bg-black text-white"
-            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
-        }`}
+        className={`p-2 rounded-md transition-colors ${editor.isActive("italic")
+          ? "bg-black text-white"
+          : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+          }`}
         aria-label="Italic"
       >
         <Italic size={16} />
@@ -92,15 +93,44 @@ const Formatter: React.FC<FormatterProps> = ({ editor }) => {
       {/* Strike */}
       <button
         onClick={() => editor.chain().focus().toggleStrike().run()}
-        className={`p-2 rounded-md transition-colors ${
-          editor.isActive("strike")
-            ? "bg-black text-white"
-            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
-        }`}
+        className={`p-2 rounded-md transition-colors ${editor.isActive("strike")
+          ? "bg-black text-white"
+          : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+          }`}
         aria-label="Strikethrough"
       >
         <Strikethrough size={16} />
       </button>
+
+      {/* Divider */}
+      <div className="h-6 w-px bg-gray-300 mx-1"></div>
+
+      {/* Font Size Dropdown */}
+      <div className={`relative ${monte.className} `}>
+        <select
+          onChange={(e) => {
+            const size = e.target.value
+            editor.chain().focus().setMark('textStyle', { fontSize: size }).run()
+          }}
+          className="appearance-none p-2 pr-6 rounded-md text-sm border border-gray-200 bg-white text-black hover:bg-gray-100 transition-colors"
+          defaultValue=""
+          aria-label="Font size"
+        >
+          <option value="12px">12px</option>
+          <option value="14px">14px</option>
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="24px">24px</option>
+          <option value="32px">32px</option>
+          <option value="64px">64px</option>
+          <option value="128px">128px</option>
+          <option value="256px">256px</option>
+        </select>
+        {/* Dropdown arrow */}
+        <div className="pointer-events-none absolute top-2 right-2 text-gray-300">
+          <ChevronDown />
+        </div>
+      </div>
 
       {/* Divider */}
       <div className="h-6 w-px bg-gray-300 mx-1"></div>
@@ -136,11 +166,10 @@ const Formatter: React.FC<FormatterProps> = ({ editor }) => {
       {/* Align Left */}
       <button
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
-        className={`p-2 rounded-md transition-colors ${
-          editor.isActive({ textAlign: "left" })
-            ? "bg-black text-white"
-            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
-        }`}
+        className={`p-2 rounded-md transition-colors ${editor.isActive({ textAlign: "left" })
+          ? "bg-black text-white"
+          : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+          }`}
         aria-label="Align left"
       >
         <AlignLeft size={16} />
@@ -149,11 +178,10 @@ const Formatter: React.FC<FormatterProps> = ({ editor }) => {
       {/* Align Center */}
       <button
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
-        className={`p-2 rounded-md transition-colors ${
-          editor.isActive({ textAlign: "center" })
-            ? "bg-black text-white"
-            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
-        }`}
+        className={`p-2 rounded-md transition-colors ${editor.isActive({ textAlign: "center" })
+          ? "bg-black text-white"
+          : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+          }`}
         aria-label="Align center"
       >
         <AlignCenter size={16} />
@@ -162,11 +190,10 @@ const Formatter: React.FC<FormatterProps> = ({ editor }) => {
       {/* Align Right */}
       <button
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
-        className={`p-2 rounded-md transition-colors ${
-          editor.isActive({ textAlign: "right" })
-            ? "bg-black text-white"
-            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
-        }`}
+        className={`p-2 rounded-md transition-colors ${editor.isActive({ textAlign: "right" })
+          ? "bg-black text-white"
+          : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+          }`}
         aria-label="Align right"
       >
         <AlignRight size={16} />
@@ -175,11 +202,10 @@ const Formatter: React.FC<FormatterProps> = ({ editor }) => {
       {/* Justify */}
       <button
         onClick={() => editor.chain().focus().setTextAlign("justify").run()}
-        className={`p-2 rounded-md transition-colors ${
-          editor.isActive({ textAlign: "justify" })
-            ? "bg-black text-white"
-            : "bg-white text-black border border-gray-200 hover:bg-gray-100"
-        }`}
+        className={`p-2 rounded-md transition-colors ${editor.isActive({ textAlign: "justify" })
+          ? "bg-black text-white"
+          : "bg-white text-black border border-gray-200 hover:bg-gray-100"
+          }`}
         aria-label="Justify"
       >
         <AlignJustify size={16} />

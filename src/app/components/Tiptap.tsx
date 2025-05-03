@@ -9,6 +9,7 @@ import Formatter from "./Formatter"
 
 import { io, Socket } from 'socket.io-client'
 import { useEffect } from "react"
+import FontSize from "@/utils/extensions/FontSize"
 
 let socket: Socket | null = null
 
@@ -18,6 +19,7 @@ const Tiptap = () => {
       StarterKit,
       TextStyle,
       Color,
+      FontSize,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
