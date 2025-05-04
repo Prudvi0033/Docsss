@@ -4,6 +4,7 @@ import { RiStickyNoteAddLine } from "react-icons/ri";
 import { MdBookmarks } from "react-icons/md";
 
 
+
 const Navbar = () => {
     return (
         <div className=' sticky top-0 z-50'>
@@ -20,5 +21,7 @@ const Navbar = () => {
         </div>
     )
 }
+
+
 
 export default Navbar
