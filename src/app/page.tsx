@@ -2,6 +2,7 @@
 import React from 'react'
 import Navbar from './components/Navbar'
 import AnimatedRadial from './components/AnimatedGradient'
+import Herosection from './components/Herosection'
 
 const page = () => {
   return (
@@ -9,10 +10,8 @@ const page = () => {
       <AnimatedRadial />
       <main className="relative z-10 h-screen">
         <Navbar/>
+        <Herosection/>
       </main>
-      <div>
-        features
-      </div>
     </>
   )
 }
