@@ -1,11 +1,19 @@
+'use client'
 import React from 'react'
-import Tiptap from './components/Tiptap'
+import Navbar from './components/Navbar'
+import AnimatedRadial from './components/AnimatedGradient'
 
 const page = () => {
   return (
-    <div>
-      <Tiptap/>
-    </div>
+    <>
+      <AnimatedRadial />
+      <main className="relative z-10 h-screen">
+        <Navbar/>
+      </main>
+      <div>
+        features
+      </div>
+    </>
   )
 }
 
