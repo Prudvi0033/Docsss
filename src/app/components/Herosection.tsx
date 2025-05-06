@@ -28,6 +28,12 @@ const Herosection = () => {
                     </div>
 
                     <div className="flex text-[12rem]">D <div><PencilAnimation /></div> cs</div>
+
+                    <div className='max-w-lg text-center flex items-center justify-center'>
+                        <p className='text-lg '>
+                        A modern editor where intelligence meets <b>collaboration</b>. Create, <span className='text-red-900 font-semibold'>co-write</span>, and <i>summarize</i> effortlessly.
+                        </p>
+                    </div>
                 </div>
 
 
